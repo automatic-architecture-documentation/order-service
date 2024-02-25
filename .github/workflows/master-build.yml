@@ -1,0 +1,63 @@
+name: master-build
+
+on:
+  push:
+    branches: [ master ]
+
+concurrency:
+  group: master-build
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+      - name: "Setup Java"
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+      - name: "Setup Gradle"
+        uses: gradle/gradle-build-action@v3
+        with:
+          gradle-version: wrapper
+      - name: "Setup Gradle Wrapper"
+        shell: bash
+        run: chmod +x gradlew
+      - name: "Build"
+        shell: bash
+        run: './gradlew --no-daemon build'
+      - name: "Upload Service Description"
+        uses: actions/upload-artifact@v4
+        with:
+          name: service-description
+          path: build/documentation/json/backend-service-1.json
+  update-central-documentation:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+        with:
+          repository: slu-it/architecture-auto-update_documentation
+          token: ${{ secrets.DOCUMENTATION_TOKEN }}
+      - name: "Download Service Description"
+        uses: actions/download-artifact@v4
+        with:
+          name: service-description
+          path: tmp
+      - name: "Replace Current JSON"
+        shell: bash
+        run: cp -f tmp/backend-service-1.json src/json/components/backend-service-1.json
+      - name: "Commit & Push Changes"
+        shell: bash
+        run: |
+          git config --global user.name "Botty"
+          git config --global user.email "bot@example.com"
+          git add src/json/components/backend-service-1.json
+          git diff --quiet --exit-code --cached || {
+            git commit -m "updated backend-service-1.json"
+            git push origin HEAD:master
+          }
