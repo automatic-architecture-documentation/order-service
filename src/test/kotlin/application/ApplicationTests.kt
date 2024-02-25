@@ -6,6 +6,8 @@ import application.documentation.ComponentType.FRONTEND
 import application.documentation.DocumentedDependency
 import application.documentation.Relationship.OWNED
 import application.documentation.RootComponentDescription
+import com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL
+import com.fasterxml.jackson.databind.SerializationFeature.INDENT_OUTPUT
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,6 +21,8 @@ class ApplicationTests {
     @Test
     fun generateServiceDescription(@Autowired dependencies: List<DocumentedDependency>) {
         val objectMapper = jacksonObjectMapper()
+            .enable(INDENT_OUTPUT)
+            .setSerializationInclusion(NON_NULL)
 
         val description = RootComponentDescription(
             id = "backend-service-1",
