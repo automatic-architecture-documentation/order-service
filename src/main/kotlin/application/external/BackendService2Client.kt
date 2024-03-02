@@ -1,8 +1,8 @@
 package application.external
 
 import application.documentation.ComponentDescription
-import application.documentation.Relationship.OWNED
 import application.documentation.ComponentType.BACKEND
+import application.documentation.Distance.OWNED
 import application.documentation.DocumentedDependency
 import org.springframework.stereotype.Component
 
@@ -14,7 +14,7 @@ class BackendService2Client : DocumentedDependency {
         contextId = "application",
         systemId = "platform",
         type = BACKEND,
-        relationship = OWNED
+        distanceFromUs = OWNED
     )
 
     fun getSomething(): String {

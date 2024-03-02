@@ -1,8 +1,8 @@
 package application.persistence
 
 import application.documentation.ComponentDescription
-import application.documentation.Relationship.CLOSE
 import application.documentation.ComponentType.DATABASE
+import application.documentation.Distance.CLOSE
 import application.documentation.DocumentedDependency
 import org.springframework.stereotype.Component
 
@@ -14,7 +14,7 @@ class SomeStore : DocumentedDependency {
         contextId = "application",
         systemId = "platform",
         type = DATABASE,
-        relationship = CLOSE
+        distanceFromUs = CLOSE
     )
 
     fun save(something: Any) {

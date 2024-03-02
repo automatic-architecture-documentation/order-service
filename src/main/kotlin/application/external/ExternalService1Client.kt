@@ -1,8 +1,8 @@
 package application.external
 
 import application.documentation.ComponentDescription
-import application.documentation.Relationship.CLOSE
 import application.documentation.ComponentType.BACKEND
+import application.documentation.Distance.CLOSE
 import application.documentation.DocumentedDependency
 import org.springframework.stereotype.Component
 
@@ -13,7 +13,7 @@ class ExternalService1Client : DocumentedDependency {
         id = "external-service-1",
         systemId = "platform",
         type = BACKEND,
-        relationship = CLOSE
+        distanceFromUs = CLOSE
     )
 
     fun getSomething(): String {
