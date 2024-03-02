@@ -1,0 +1,17 @@
+= Backend Service 1
+
+This is one of the backend services that push data to the documentation repository.
+
+The `build` of this service includes a test that generates a `.json` file for the central link:https://github.com/automatic-architecture-documentation/documentation[documentation repository].
+
+== How Does It Work?
+
+The principal is rather simple:
+
+* Use an application-level `@SpringBootTest` (link:src/test/kotlin/application/ApplicationTests.kt[ApplicationTests]) dynamically gather the application's name and all its dependencies to generate the `.json` file.
+* Dependencies are defined by implementing the `DocumentedDependency` interface:
+** A `@Component` that does HTTP calls to another service (e.g. link:src/main/kotlin/application/external/BackendService2Client.kt[BackendService2Client]) would represent a dependency to that other backend.
+** A `@Repository` or other database related `@Service` could represent a database dependency.
+** A `@Component` for sending messages to an exchange could represent a RabbitMQ dependency.
+** etc.
+* Dependents are either hard coded or if you are working with contracts (e.g. PACT, Spring Cloud Contract), you could generate them from those.
