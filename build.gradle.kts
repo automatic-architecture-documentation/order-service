@@ -1,40 +1,68 @@
+import documentation.generateApplicationDescription
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
 
 plugins {
-	id("org.springframework.boot") version "3.2.3"
-	id("io.spring.dependency-management") version "1.1.4"
-	kotlin("jvm") version "1.9.22"
-	kotlin("plugin.spring") version "1.9.22"
+    id("org.springframework.boot") version "3.2.3"
+    id("io.spring.dependency-management") version "1.1.4"
+    kotlin("jvm") version "1.9.22"
+    kotlin("plugin.spring") version "1.9.22"
 }
 
 group = "com.example"
 version = "0.0.1-SNAPSHOT"
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.jetbrains.kotlin:kotlin-bom:1.9.22")
+        mavenBom(BOM_COORDINATES)
+    }
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	implementation("com.fasterxml.jackson.core:jackson-annotations")
-	implementation("com.fasterxml.jackson.core:jackson-core")
-	implementation("com.fasterxml.jackson.core:jackson-databind")
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("com.fasterxml.jackson.core:jackson-annotations")
+    implementation("com.fasterxml.jackson.core:jackson-core")
+    implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.wiremock:wiremock-standalone:3.4.1")
 }
 
 tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		freeCompilerArgs += "-Xjsr305=strict"
-		jvmTarget = "17"
-	}
+    kotlinOptions {
+        freeCompilerArgs += "-Xjsr305=strict"
+        jvmTarget = "17"
+    }
 }
 
 tasks.withType<Test> {
-	useJUnitPlatform()
+    useJUnitPlatform()
+}
+
+tasks.register("generateApplicationDescription") {
+    val sourceFolder = File(project.rootDir, "build/architecture-documentation")
+    val targetFolder = File(project.rootDir, "build/documentation/json")
+
+    inputs.dir(sourceFolder)
+    outputs.dir(targetFolder)
+
+    dependsOn("test")
+    doLast {
+        generateApplicationDescription(sourceFolder, targetFolder, "backend-service-1")
+    }
+}
+
+tasks.build {
+    dependsOn("generateApplicationDescription")
 }

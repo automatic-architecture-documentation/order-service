@@ -1,0 +1,82 @@
+package application.external
+
+import application.documentation.ArchitectureDocumentation.createOrAmendDependencyEndpoints
+import application.documentation.ArchitectureDocumentation.createOrReplaceDependency
+import application.documentation.ComponentDescription
+import application.documentation.ComponentType
+import application.documentation.Distance
+import application.documentation.WireMockSupport.extractEndpointsFromEvents
+import com.github.tomakehurst.wiremock.client.WireMock.equalTo
+import com.github.tomakehurst.wiremock.client.WireMock.get
+import com.github.tomakehurst.wiremock.client.WireMock.ok
+import com.github.tomakehurst.wiremock.client.WireMock.urlPathTemplate
+import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
+import com.github.tomakehurst.wiremock.junit5.WireMockTest
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Test
+import java.net.URL
+
+@WireMockTest
+class ExternalService1ClientTests(
+    wireMockInfo: WireMockRuntimeInfo
+) {
+
+    private val description = ComponentDescription(
+        id = "external-service-1",
+        systemId = "platform",
+        type = ComponentType.BACKEND,
+        distanceFromUs = Distance.CLOSE
+    )
+
+    private val contextPath = "/es1"
+    private val wireMock = wireMockInfo.wireMock
+
+    private val properties = ExternalService1Properties(
+        baseUrl = URL("http://localhost:${wireMockInfo.httpPort}$contextPath")
+    )
+    private val cut = ExternalService1Configuration(properties).externalService1Client()
+
+    @AfterEach
+    fun documentCalledEndpoints() {
+        val endpoints = extractEndpointsFromEvents(wireMock, contextPath)
+        createOrAmendDependencyEndpoints(description, endpoints)
+    }
+
+    @Test
+    fun `document dependency`() {
+        createOrReplaceDependency(description)
+    }
+
+    @Test
+    fun abc() {
+        wireMock.register(
+            get(urlPathTemplate("$contextPath/foo/{id}"))
+                .withPathParam("id", equalTo("4ab8c691-0a49-45e2-8290-e6942bd735da"))
+                .willReturn(
+                    ok("hello-world!")
+                )
+        )
+
+        val result = cut.getSomething("4ab8c691-0a49-45e2-8290-e6942bd735da")
+
+        assertThat(result).isEqualTo("hello-world!")
+    }
+
+    @Test
+    fun abcdef() {
+        wireMock.register(
+            get(urlPathTemplate("$contextPath/foo/{id}"))
+                .withPathParam("id", equalTo("cda81952-f3d9-4be1-9f0b-71e2bd34528d"))
+                .willReturn(
+                    ok("hello-world!")
+                )
+        )
+
+        val result1 = cut.getSomething("cda81952-f3d9-4be1-9f0b-71e2bd34528d")
+        val result2 = cut.getSomething("cda81952-f3d9-4be1-9f0b-71e2bd34528d")
+
+        assertThat(result1).isEqualTo("hello-world!")
+        assertThat(result2).isEqualTo("hello-world!")
+    }
+}

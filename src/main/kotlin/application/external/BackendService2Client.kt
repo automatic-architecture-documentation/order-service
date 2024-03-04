@@ -1,23 +1,40 @@
 package application.external
 
-import application.documentation.ComponentDescription
-import application.documentation.ComponentType.BACKEND
-import application.documentation.Distance.OWNED
-import application.documentation.DocumentedDependency
-import org.springframework.stereotype.Component
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.web.client.RestClient
+import org.springframework.web.client.body
+import java.net.URL
 
-@Component
-class BackendService2Client : DocumentedDependency {
+class BackendService2Client(
+    private val client: RestClient
+) {
 
-    override val description = ComponentDescription(
-        id = "backend-service-2",
-        contextId = "application",
-        systemId = "platform",
-        type = BACKEND,
-        distanceFromUs = OWNED
-    )
-
-    fun getSomething(): String {
-        TODO("some kind of implementation")
-    }
+    fun getSomething(id: String): String? =
+        client.get()
+            .uri { it.path("/bar/{id}").build(mapOf("id" to id)) }
+            .retrieve()
+            .body<String>()
 }
+
+@Configuration
+@EnableConfigurationProperties(BackendService2Properties::class)
+class BackendService2Configuration(
+    private val properties: BackendService2Properties
+) {
+
+    @Bean
+    fun backendService2Client(): BackendService2Client =
+        BackendService2Client(
+            client = RestClient.builder()
+                .baseUrl(properties.baseUrl.toString())
+                .build()
+        )
+}
+
+@ConfigurationProperties("application.external.backends.backend-service-2")
+data class BackendService2Properties(
+    val baseUrl: URL
+)
