@@ -1,10 +1,8 @@
 package application.external
 
+import application.documentation.*
 import application.documentation.ArchitectureDocumentation.createOrAmendDependencyEndpoints
 import application.documentation.ArchitectureDocumentation.createOrReplaceDependency
-import application.documentation.ComponentDescription
-import application.documentation.ComponentType
-import application.documentation.Distance
 import application.documentation.WireMockSupport.extractEndpointsFromEvents
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.get
@@ -22,12 +20,13 @@ class BackendService2ClientTests(
     wireMockInfo: WireMockRuntimeInfo
 ) {
 
-    private val description = ComponentDescription(
+    private val description = DependencyDescription(
         id = "backend-service-2",
         groupId = "application",
         systemId = "platform",
         type = ComponentType.BACKEND,
-        distanceFromUs = Distance.OWNED
+        distanceFromUs = Distance.OWNED,
+        credentials = listOf(Credentials.JWT),
     )
 
     private val contextPath = "/bs2"
@@ -50,31 +49,31 @@ class BackendService2ClientTests(
     }
 
     @Test
-    fun abc() {
+    fun test1() {
         wireMock.register(
-            get(urlPathTemplate("$contextPath/bar/{id}"))
-                .withPathParam("id", equalTo("4ab8c691-0a49-45e2-8290-e6942bd735da"))
+            get(urlPathTemplate("$contextPath/bookings/{userId}"))
+                .withPathParam("userId", equalTo("4ab8c691-0a49-45e2-8290-e6942bd735da"))
                 .willReturn(
                     ok("hello-world!")
                 )
         )
 
-        val result = cut.getSomething("4ab8c691-0a49-45e2-8290-e6942bd735da")
+        val result = cut.getBookingsOfUser("4ab8c691-0a49-45e2-8290-e6942bd735da")
 
         assertThat(result).isEqualTo("hello-world!")
     }
 
     @Test
-    fun abcdef() {
+    fun test2() {
         wireMock.register(
-            get(urlPathTemplate("$contextPath/bar/{id}"))
-                .withPathParam("id", equalTo("cda81952-f3d9-4be1-9f0b-71e2bd34528d"))
+            get(urlPathTemplate("$contextPath/bookings/{userId}"))
+                .withPathParam("userId", equalTo("cda81952-f3d9-4be1-9f0b-71e2bd34528d"))
                 .willReturn(
                     ok("hello-world!")
                 )
         )
 
-        val result = cut.getSomething("cda81952-f3d9-4be1-9f0b-71e2bd34528d")
+        val result = cut.getBookingsOfUser("cda81952-f3d9-4be1-9f0b-71e2bd34528d")
         assertThat(result).isEqualTo("hello-world!")
     }
 }

@@ -12,9 +12,9 @@ class BackendService2Client(
     private val client: RestClient
 ) {
 
-    fun getSomething(id: String): String? =
+    fun getBookingsOfUser(userId: String): String? =
         client.get()
-            .uri { it.path("/bar/{id}").build(mapOf("id" to id)) }
+            .uri { it.path("/bookings/{userId}").build(mapOf("userId" to userId)) }
             .retrieve()
             .body<String>()
 }

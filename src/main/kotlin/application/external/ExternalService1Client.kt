@@ -12,9 +12,9 @@ class ExternalService1Client(
     private val client: RestClient
 ) {
 
-    fun getSomething(id: String): String? =
+    fun getOpenInvoices(id: String): String? =
         client.get()
-            .uri { it.path("/foo/{id}").build(mapOf("id" to id)) }
+            .uri { it.path("/invoices/{userId}/{state}").build(mapOf("userId" to id, "state" to "open")) }
             .retrieve()
             .body<String>()
 }

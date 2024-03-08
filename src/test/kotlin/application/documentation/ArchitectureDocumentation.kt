@@ -16,7 +16,7 @@ object ArchitectureDocumentation {
 
     private val lock = Any()
 
-    fun createOrReplaceApplication(description: ComponentDescription) {
+    fun createOrReplaceApplication(description: ApplicationDescription) {
         val file = File(rootFolder, description.id + ".json")
 
         createOrReplaceFile(file) {
@@ -24,7 +24,7 @@ object ArchitectureDocumentation {
         }
     }
 
-    fun createOrReplaceDependent(description: ComponentDescription) {
+    fun createOrReplaceDependent(description: DependentDescription) {
         val folder = File(rootFolder, "dependents")
         val dependencyFile = File(folder, description.id + ".json")
 
@@ -33,7 +33,7 @@ object ArchitectureDocumentation {
         }
     }
 
-    fun createOrReplaceDependency(description: ComponentDescription) {
+    fun createOrReplaceDependency(description: DependencyDescription) {
         val folder = File(rootFolder, "dependencies")
         val file = File(folder, description.id + ".json")
 
@@ -42,7 +42,7 @@ object ArchitectureDocumentation {
         }
     }
 
-    fun createOrAmendDependencyEndpoints(description: ComponentDescription, endpoints: List<HttpEndpoint>) {
+    fun createOrAmendDependencyEndpoints(description: DependencyDescription, endpoints: List<HttpEndpoint>) {
         val folder = File(rootFolder, "dependencies/http-endpoints")
         val file = File(folder, description.id + ".jsonl")
 
