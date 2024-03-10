@@ -7,7 +7,7 @@ import application.documentation.DependencyDescription
 import application.documentation.Distance.OWNED
 import org.junit.jupiter.api.Test
 
-class SomeStoreTests {
+class AuditLogRepositoryTests {
 
     private val description = DependencyDescription(
         id = "backend-service-1-database",

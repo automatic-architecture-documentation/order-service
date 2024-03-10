@@ -1,0 +1,43 @@
+{
+  "consumer": {
+    "name": "external-service-x"
+  },
+  "interactions": [
+    {
+      "description": "execute simple search #1",
+      "providerStates": [
+        {
+          "name": "search returns empty result"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": "application/json"
+        },
+        "method": "POST",
+        "path": "/search",
+        "body": {
+          "userName": "lorem@ipsum.com"
+        }
+      },
+      "response": {
+        "body": [],
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-jvm": {
+      "version": "4.6.7"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "backend-service-1"
+  }
+}
