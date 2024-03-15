@@ -22,7 +22,6 @@ class ExternalService1ClientTests(
 
     private val description = DependencyDescription(
         id = "external-service-1",
-        systemId = "platform",
         type = ComponentType.BACKEND,
         distanceFromUs = Distance.CLOSE,
         credentials = listOf(Credentials.JWT),

@@ -50,8 +50,6 @@ internal class ContractTests {
         when (consumer.name) {
             "frontend" -> DependentDescription(
                 id = "frontend",
-                groupId = "application",
-                systemId = "platform",
                 type = ComponentType.FRONTEND,
                 distanceFromUs = Distance.OWNED
             )

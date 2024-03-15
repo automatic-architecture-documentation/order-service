@@ -14,8 +14,6 @@ class ArchitectureDocumentationTests {
         createOrReplaceApplication(
             ApplicationDescription(
                 id = "backend-service-1",
-                groupId = "application",
-                systemId = "platform",
                 type = BACKEND,
                 distanceFromUs = OWNED
             )

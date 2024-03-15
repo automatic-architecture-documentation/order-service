@@ -22,8 +22,6 @@ class BackendService2ClientTests(
 
     private val description = DependencyDescription(
         id = "backend-service-2",
-        groupId = "application",
-        systemId = "platform",
         type = ComponentType.BACKEND,
         distanceFromUs = Distance.OWNED,
         credentials = listOf(Credentials.JWT),

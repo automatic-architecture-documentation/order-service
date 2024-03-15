@@ -6,19 +6,12 @@ package documentation.model
 
 sealed interface Component {
     val id: String
-    val groupId: String?
-    val systemId: String?
     val type: ComponentType?
     val distanceFromUs: Distance?
 }
 
-enum class ComponentType { BACKEND, FRONTEND, DATABASE }
-enum class Distance { OWNED, CLOSE, DISTANT }
-
 data class Application(
     override val id: String,
-    override val groupId: String?,
-    override val systemId: String?,
     override val type: ComponentType?,
     override val distanceFromUs: Distance?,
     val dependents: List<Dependent> = emptyList(),
@@ -27,21 +20,20 @@ data class Application(
 
 data class Dependent(
     override val id: String,
-    override val groupId: String?,
-    override val systemId: String?,
     override val type: ComponentType?,
     override val distanceFromUs: Distance?,
 ) : Component
 
 data class Dependency(
     override val id: String,
-    override val groupId: String?,
-    override val systemId: String?,
     override val type: ComponentType?,
     override val distanceFromUs: Distance?,
     val credentials: List<Credentials> = emptyList(),
     val httpEndpoints: List<HttpEndpoint> = emptyList(),
 ) : Component
 
+enum class ComponentType { BACKEND, FRONTEND, DATABASE }
+enum class Distance { OWNED, CLOSE, DISTANT }
+enum class Credentials { JWT, BASIC_AUTH }
+
 data class HttpEndpoint(val method: String, val path: String)
-enum class Credentials(val label: String) { JWT("JWT"), BASIC_AUTH("Basic-Auth") }
