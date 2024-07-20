@@ -13,7 +13,7 @@ class ArchitectureDocumentationTests {
     fun `generate application description`() {
         createOrReplaceApplication(
             ApplicationDescription(
-                id = "backend-service-1",
+                id = "order-service",
                 type = BACKEND,
                 distanceFromUs = OWNED
             )

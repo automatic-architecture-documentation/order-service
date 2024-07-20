@@ -4,28 +4,21 @@
   },
   "interactions": [
     {
-      "description": "execute simple search #1",
+      "description": "delete an order",
       "providerStates": [
         {
-          "name": "search returns empty result"
+          "name": "order with any id exists and can be deleted"
         }
       ],
       "request": {
         "headers": {
           "Accept": "application/json"
         },
-        "method": "POST",
-        "path": "/search",
-        "body": {
-          "userName": "lorem@ipsum.com"
-        }
+        "method": "DELETE",
+        "path": "/orders/4ae745c2-da59-46a9-9775-063d59549629"
       },
       "response": {
-        "body": [],
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "status": 200
+        "status": 204
       }
     }
   ],
@@ -38,6 +31,6 @@
     }
   },
   "provider": {
-    "name": "backend-service-1"
+    "name": "order-service"
   }
 }

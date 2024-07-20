@@ -23,7 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDO
 import org.springframework.boot.test.web.server.LocalServerPort
 
 @TestInstance(PER_CLASS)
-@Provider("backend-service-1")
+@Provider("order-service")
 @PactFolder("src/test/pacts")
 @VerificationReports("console")
 @SpringBootTest(webEnvironment = RANDOM_PORT)
@@ -41,7 +41,7 @@ internal class ContractTests {
         context.verifyInteraction()
     }
 
-    @State("search returns empty result")
+    @State("order with any id exists and can be deleted")
     fun noOpStates() {
         // nothing to do
     }

@@ -3,7 +3,7 @@ package application.persistence
 import org.springframework.stereotype.Component
 
 @Component
-class AuditLogRepository {
+class OrderRepository {
 
     fun save(something: Any) {
         TODO("some kind of implementation")

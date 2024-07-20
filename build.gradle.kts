@@ -60,7 +60,7 @@ tasks.register("generateApplicationDescription") {
 
     dependsOn("test")
     doLast {
-        generateApplicationDescription(sourceFolder, targetFolder, "backend-service-1")
+        generateApplicationDescription(sourceFolder, targetFolder, "order-service")
     }
 }
 

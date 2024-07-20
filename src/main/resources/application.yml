@@ -1,11 +1,11 @@
 application:
   external:
     backends:
-      backend-service-2:
+      inventory-service:
         base-url: https://backend-service-2
-      external-service-1:
+      payment-service:
         base-url: https://egress-gateway/es1
 
 spring:
   application:
-    name: backend-service-1
+    name: order-service

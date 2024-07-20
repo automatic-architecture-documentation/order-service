@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: application-description
-          path: build/documentation/json/backend-service-1.json
+          path: build/documentation/json/order-service.json
   update-documentation:
     needs: build
     runs-on: ubuntu-latest
@@ -50,14 +50,14 @@ jobs:
           path: tmp
       - name: "Replace Current JSON"
         shell: bash
-        run: cp -f tmp/backend-service-1.json .build/src/json/components/backend-service-1.json
+        run: cp -f tmp/order-service.json .build/src/json/components/order-service.json
       - name: "Commit & Push Changes"
         shell: bash
         run: |
           git config --global user.name "Botty"
           git config --global user.email "bot@example.com"
-          git add .build/src/json/components/backend-service-1.json
+          git add .build/src/json/components/order-service.json
           git diff --quiet --exit-code --cached || {
-            git commit -m "updated backend-service-1.json"
+            git commit -m "updated order-service.json"
             git push origin HEAD:master
           }

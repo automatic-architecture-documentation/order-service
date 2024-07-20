@@ -7,21 +7,24 @@ import application.documentation.Credentials
 import application.documentation.DependencyDescription
 import application.documentation.Distance
 import application.documentation.WireMockSupport.extractEndpointsFromEvents
-import com.github.tomakehurst.wiremock.client.WireMock.*
+import com.github.tomakehurst.wiremock.client.WireMock.ok
+import com.github.tomakehurst.wiremock.client.WireMock.post
+import com.github.tomakehurst.wiremock.client.WireMock.urlPathTemplate
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
+import org.springframework.http.HttpHeaders.CONTENT_TYPE
+import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import java.net.URL
 
 @WireMockTest
-class ExternalService1ClientTests(
+class PaymentClientTests(
     wireMockInfo: WireMockRuntimeInfo
 ) {
 
     private val description = DependencyDescription(
-        id = "external-service-1",
+        id = "payment-service",
         type = ComponentType.BACKEND,
         distanceFromUs = Distance.CLOSE,
         credentials = listOf(Credentials.JWT),
@@ -30,10 +33,10 @@ class ExternalService1ClientTests(
     private val contextPath = "/es1"
     private val wireMock = wireMockInfo.wireMock
 
-    private val properties = ExternalService1Properties(
+    private val properties = PaymentServiceProperties(
         baseUrl = URL("http://localhost:${wireMockInfo.httpPort}$contextPath")
     )
-    private val cut = ExternalService1Configuration(properties).externalService1Client()
+    private val cut = PaymentClientConfiguration(properties).paymentClient()
 
     @AfterEach
     fun documentCalledEndpoints() {
@@ -47,36 +50,30 @@ class ExternalService1ClientTests(
     }
 
     @Test
-    fun test1() {
+    fun `some test for paying with a credit card`() {
         wireMock.register(
-            get(urlPathTemplate("$contextPath/invoices/{userId}/{state}"))
-                .withPathParam("userId", equalTo("4ab8c691-0a49-45e2-8290-e6942bd735da"))
-                .withPathParam("state", equalTo("open"))
+            post(urlPathTemplate("$contextPath/payments"))
                 .willReturn(
-                    ok("hello-world!")
+                    ok("{}")
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 )
         )
 
-        val result = cut.getOpenInvoices("4ab8c691-0a49-45e2-8290-e6942bd735da")
-
-        assertThat(result).isEqualTo("hello-world!")
+        cut.processCreditCardPayment("4111111111111111", "12/24", "123")
+        // test incomplete ...
     }
 
     @Test
-    fun test2() {
+    fun `some test for paying via bank transfer`() {
         wireMock.register(
-            get(urlPathTemplate("$contextPath/invoices/{userId}/{state}"))
-                .withPathParam("userId", equalTo("cda81952-f3d9-4be1-9f0b-71e2bd34528d"))
-                .withPathParam("state", equalTo("open"))
+            post(urlPathTemplate("$contextPath/payments"))
                 .willReturn(
-                    ok("hello-world!")
+                    ok("{}")
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 )
         )
 
-        val result1 = cut.getOpenInvoices("cda81952-f3d9-4be1-9f0b-71e2bd34528d")
-        val result2 = cut.getOpenInvoices("cda81952-f3d9-4be1-9f0b-71e2bd34528d")
-
-        assertThat(result1).isEqualTo("hello-world!")
-        assertThat(result2).isEqualTo("hello-world!")
+        cut.processBankTransferPayment("DE99370400440532013000")
+        // test incomplete ...
     }
 }

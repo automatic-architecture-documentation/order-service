@@ -7,21 +7,26 @@ import application.documentation.WireMockSupport.extractEndpointsFromEvents
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.ok
+import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathTemplate
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpHeaders.CONTENT_TYPE
+import org.springframework.http.MediaType
+import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import java.net.URL
 
 @WireMockTest
-class BackendService2ClientTests(
+class InventoryClientTests(
     wireMockInfo: WireMockRuntimeInfo
 ) {
 
     private val description = DependencyDescription(
-        id = "backend-service-2",
+        id = "inventory-service",
         type = ComponentType.BACKEND,
         distanceFromUs = Distance.OWNED,
         credentials = listOf(Credentials.JWT),
@@ -30,10 +35,10 @@ class BackendService2ClientTests(
     private val contextPath = "/bs2"
     private val wireMock = wireMockInfo.wireMock
 
-    private val properties = BackendService2Properties(
+    private val properties = InventoryServiceProperties(
         baseUrl = URL("http://localhost:${wireMockInfo.httpPort}$contextPath")
     )
-    private val cut = BackendService2Configuration(properties).backendService2Client()
+    private val cut = InventoryClientConfiguration(properties).inventoryClient()
 
     @AfterEach
     fun documentCalledEndpoints() {
@@ -47,31 +52,32 @@ class BackendService2ClientTests(
     }
 
     @Test
-    fun test1() {
+    fun `some test for getting inventory information of a product`() {
         wireMock.register(
-            get(urlPathTemplate("$contextPath/bookings/{userId}"))
-                .withPathParam("userId", equalTo("4ab8c691-0a49-45e2-8290-e6942bd735da"))
+            get(urlPathTemplate("$contextPath/inventory/{productId}"))
+                .withPathParam("productId", equalTo("4ab8c691-0a49-45e2-8290-e6942bd735da"))
                 .willReturn(
-                    ok("hello-world!")
+                    ok("{}")
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 )
         )
 
-        val result = cut.getBookingsOfUser("4ab8c691-0a49-45e2-8290-e6942bd735da")
-
-        assertThat(result).isEqualTo("hello-world!")
+        cut.getProductInventory("4ab8c691-0a49-45e2-8290-e6942bd735da")
+        // test incomplete ...
     }
 
     @Test
-    fun test2() {
+    fun `some test to reserve an amount of product in the inventory`() {
         wireMock.register(
-            get(urlPathTemplate("$contextPath/bookings/{userId}"))
-                .withPathParam("userId", equalTo("cda81952-f3d9-4be1-9f0b-71e2bd34528d"))
+            post(urlPathTemplate("$contextPath/inventory/{productId}/reserve"))
+                .withPathParam("productId", equalTo("cda81952-f3d9-4be1-9f0b-71e2bd34528d"))
                 .willReturn(
-                    ok("hello-world!")
+                    ok("{}")
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 )
         )
 
-        val result = cut.getBookingsOfUser("cda81952-f3d9-4be1-9f0b-71e2bd34528d")
-        assertThat(result).isEqualTo("hello-world!")
+        cut.reserveProductInventory("cda81952-f3d9-4be1-9f0b-71e2bd34528d", 3)
+        // test incomplete ...
     }
 }
