@@ -16,6 +16,7 @@ data class Application(
     override val distanceFromUs: Distance?,
     val dependents: List<Dependent> = emptyList(),
     val dependencies: List<Dependency> = emptyList(),
+    val events: List<Event> = emptyList(),
 ) : Component
 
 data class Dependent(
@@ -37,3 +38,18 @@ enum class Distance { OWNED, CLOSE, DISTANT }
 enum class Credentials { JWT, BASIC_AUTH }
 
 data class HttpEndpoint(val method: String, val path: String)
+
+data class Event(
+    val name: String,
+    val type: String,
+    val description: String,
+    val example: String,
+    val fields: List<Field>,
+) {
+    data class Field(
+        val property: String,
+        val type: String,
+        val nullable: Boolean,
+        val description: String?,
+    )
+}

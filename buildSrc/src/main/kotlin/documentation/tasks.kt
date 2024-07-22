@@ -8,6 +8,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import documentation.model.Application
 import documentation.model.Dependency
 import documentation.model.Dependent
+import documentation.model.Event
 import documentation.model.HttpEndpoint
 import java.io.File
 import kotlin.reflect.KClass
@@ -22,8 +23,10 @@ fun generateApplicationDescription(sourceFolder: File, targetFolder: File, appli
     val baseApplicationDescription = loadBaseApplicationDescription(sourceFolder, applicationId)
     val dependents = loadDependents(sourceFolder)
     val dependencies = loadDependencies(sourceFolder)
+    val events = loadEvents(sourceFolder)
 
-    val applicationDescription = baseApplicationDescription.copy(dependents = dependents, dependencies = dependencies)
+    val applicationDescription = baseApplicationDescription
+        .copy(dependents = dependents, dependencies = dependencies, events = events)
 
     val file = File(targetFolder, applicationDescription.id + ".json")
     objectMapper.writeValue(file, applicationDescription)
@@ -60,6 +63,14 @@ private fun loadDependency(file: File): Dependency {
     }
 
     return dependency.copy(httpEndpoints = httpEndpoints)
+}
+
+private fun loadEvents(sourceFolder: File): List<Event> =
+    listJsonFilesInFolder(File(sourceFolder, "events"))
+        .map { file -> loadEvent(file) }
+
+private fun loadEvent(file: File): Event {
+    return objectMapper.readValue<Event>(file)
 }
 
 private fun listJsonFilesInFolder(folder: File): List<File> =

@@ -56,9 +56,17 @@ object ArchitectureDocumentation {
         }
     }
 
+    fun createOrReplaceEvent(description: EventDescription) {
+        val folder = File(rootFolder, "events")
+        val file = File(folder, description.type + ".json")
+
+        createOrReplaceFile(file) {
+            write(toJsonString(description))
+        }
+    }
+
     private fun toJsonString(value: Any): String =
         objectMapper.writeValueAsString(value)
-
 
     private fun createOrAppendFile(file: File, writer: BufferedWriter.() -> Unit) {
         file.parentFile.mkdirs()
@@ -67,6 +75,6 @@ object ArchitectureDocumentation {
 
     private fun createOrReplaceFile(file: File, writer: BufferedWriter.() -> Unit) {
         file.parentFile.mkdirs()
-        FileOutputStream(file, true).use { it.bufferedWriter().use(writer) }
+        FileOutputStream(file, false).use { it.bufferedWriter().use(writer) }
     }
 }

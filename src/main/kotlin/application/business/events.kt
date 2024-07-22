@@ -3,19 +3,21 @@ package application.business
 import java.time.Instant
 import java.util.UUID
 
-interface OrderEvent {
+interface Event {
     val id: UUID
     val timestamp: Instant
-    val order: OrderData
-
+    fun getEventName(): String
     fun getEventType(): String
+}
+
+interface OrderEvent : Event {
+    val order: OrderData
 }
 
 data class OrderData(
     val orderId: UUID,
     val customerId: UUID,
-    val orderDate: Instant,
-    val status: String,
+    val status: OrderStatus,
     // etc ..
 )
 
@@ -24,6 +26,7 @@ data class OrderPlaced(
     override val timestamp: Instant,
     override val order: OrderData,
 ) : OrderEvent {
+    override fun getEventName() = "Order Placed"
     override fun getEventType() = "orders.placed"
 }
 
@@ -32,5 +35,6 @@ data class OrderCanceled(
     override val timestamp: Instant,
     override val order: OrderData,
 ) : OrderEvent {
+    override fun getEventName() = "Order Canceled"
     override fun getEventType() = "orders.canceled"
 }

@@ -20,7 +20,7 @@ class OrdersController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    fun create(@RequestBody request: CreationRequest): OrderRepresentation {
+    fun place(@RequestBody request: CreationRequest): OrderRepresentation {
         TODO("not implemented")
     }
 
