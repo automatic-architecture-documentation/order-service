@@ -49,8 +49,8 @@ class EventDescriptionSpec(
     }
 
     internal fun build() = EventDescription(
-        name = example.getEventName(),
-        type = example.getEventType(),
+        name = example.eventName(),
+        type = example.eventType(),
         description = description,
         example = eventObjectMapper.writeValueAsString(example),
         fields = fields

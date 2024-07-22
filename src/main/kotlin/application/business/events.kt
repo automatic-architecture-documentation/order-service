@@ -6,8 +6,8 @@ import java.util.UUID
 interface Event {
     val id: UUID
     val timestamp: Instant
-    fun getEventName(): String
-    fun getEventType(): String
+    fun eventName(): String
+    fun eventType(): String
 }
 
 interface OrderEvent : Event {
@@ -26,8 +26,8 @@ data class OrderPlaced(
     override val timestamp: Instant,
     override val order: OrderData,
 ) : OrderEvent {
-    override fun getEventName() = "Order Placed"
-    override fun getEventType() = "orders.placed"
+    override fun eventName() = "Order Placed"
+    override fun eventType() = "orders.placed"
 }
 
 data class OrderCanceled(
@@ -35,6 +35,6 @@ data class OrderCanceled(
     override val timestamp: Instant,
     override val order: OrderData,
 ) : OrderEvent {
-    override fun getEventName() = "Order Canceled"
-    override fun getEventType() = "orders.canceled"
+    override fun eventName() = "Order Canceled"
+    override fun eventType() = "orders.canceled"
 }
