@@ -1,4 +1,3 @@
-import documentation.generateApplicationDescription
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
 
@@ -49,21 +48,4 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
-}
-
-tasks.register("generateApplicationDescription") {
-    val sourceFolder = File(project.rootDir, "build/architecture-documentation")
-    val targetFolder = File(project.rootDir, "build/documentation/json")
-
-    inputs.dir(sourceFolder)
-    outputs.dir(targetFolder)
-
-    dependsOn("test")
-    doLast {
-        generateApplicationDescription(sourceFolder, targetFolder, "order-service")
-    }
-}
-
-tasks.build {
-    dependsOn("generateApplicationDescription")
 }

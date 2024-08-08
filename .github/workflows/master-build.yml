@@ -29,35 +29,17 @@ jobs:
       - name: "Build"
         shell: bash
         run: './gradlew --no-daemon build'
-      - name: "Upload Application Description"
+      - name: "Upload Architecture Documentation Parts"
         uses: actions/upload-artifact@v4
         with:
-          name: application-description
-          path: build/documentation/json/order-service.json
+          name: architecture-documentation-parts
+          path: build/architecture-documentation/**
   update-documentation:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
+      - name: "Update Component"
+        uses: automatic-architecture-documentation/documentation/.github/actions/update-component@master
         with:
-          repository: automatic-architecture-documentation/documentation
-          token: ${{ secrets.DOCUMENTATION_WRITE_TOKEN }}
-      - name: "Download Application Description"
-        uses: actions/download-artifact@v4
-        with:
-          name: application-description
-          path: tmp
-      - name: "Replace Current JSON"
-        shell: bash
-        run: cp -f tmp/order-service.json .build/src/json/components/order-service.json
-      - name: "Commit & Push Changes"
-        shell: bash
-        run: |
-          git config --global user.name "Botty"
-          git config --global user.email "bot@example.com"
-          git add .build/src/json/components/order-service.json
-          git diff --quiet --exit-code --cached || {
-            git commit -m "updated order-service.json"
-            git push origin HEAD:master
-          }
+          component-id: order-service
+          github-token: ${{ secrets.DOCUMENTATION_WRITE_TOKEN }}
