@@ -2,8 +2,12 @@ package application.business
 
 import application.business.OrderStatus.PLACED
 import application.business.OrderStatus.PROCESSING
+import application.config.messaging.EXCHANGE_ORDER_EVENTS
+import application.documentation.ArchitectureDocumentation.createOrAmendPublishedMessage
 import application.documentation.ArchitectureDocumentation.createOrReplaceEvent
+import application.documentation.EventDescription
 import application.documentation.EventDescriptionSpec
+import application.documentation.PublishedMessage
 import application.documentation.eventDescription
 import org.junit.jupiter.api.Test
 import java.time.Instant.parse
@@ -28,7 +32,7 @@ class OrderEventTests {
                 orderDataFields("order")
             }
         )
-        createOrReplaceEvent(description)
+        createDocumentationParts(description)
     }
 
     @Test
@@ -48,7 +52,7 @@ class OrderEventTests {
                 orderDataFields("order")
             }
         )
-        createOrReplaceEvent(description)
+        createDocumentationParts(description)
     }
 
     private fun EventDescriptionSpec.orderDataFields(objectName: String) {
@@ -72,5 +76,14 @@ class OrderEventTests {
             description = "The status of the order. Might have one of the following values: "
                     + OrderStatus.entries.joinToString()
         )
+    }
+
+    private fun createDocumentationParts(description: EventDescription) {
+        createOrReplaceEvent(description)
+        val publishedMessage = PublishedMessage(
+            exchange = EXCHANGE_ORDER_EVENTS,
+            routingKey = description.type
+        )
+        createOrAmendPublishedMessage(publishedMessage)
     }
 }

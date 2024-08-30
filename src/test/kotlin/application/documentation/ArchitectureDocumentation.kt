@@ -65,6 +65,30 @@ object ArchitectureDocumentation {
         }
     }
 
+    fun createOrAmendPublishedMessage(publishedMessage: PublishedMessage) {
+        val folder = File(rootFolder, "messaging")
+        val file = File(folder, "published-messages.jsonl")
+
+        synchronized(lock) {
+            createOrAppendFile(file) {
+                write(toJsonString(publishedMessage))
+                newLine()
+            }
+        }
+    }
+
+    fun createOrAmendConsumedQueue(consumedQueue: ConsumedQueue) {
+        val folder = File(rootFolder, "messaging")
+        val file = File(folder, "consumed-queues.jsonl")
+
+        synchronized(lock) {
+            createOrAppendFile(file) {
+                write(toJsonString(consumedQueue))
+                newLine()
+            }
+        }
+    }
+
     private fun toJsonString(value: Any): String =
         objectMapper.writeValueAsString(value)
 

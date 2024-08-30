@@ -39,3 +39,20 @@ data class EventDescription(
         val description: String?,
     )
 }
+
+data class PublishedMessage(
+    val exchange: String,
+    val routingKey: String,
+)
+
+data class ConsumedQueue(
+    val name: String,
+    val bindings: List<Binding>,
+) {
+    constructor(name: String, binding: Binding) : this(name, listOf(binding))
+
+    data class Binding(
+        val exchange: String,
+        val routingKeyPattern: String,
+    )
+}

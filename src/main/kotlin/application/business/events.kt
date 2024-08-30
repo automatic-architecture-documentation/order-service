@@ -27,7 +27,7 @@ data class OrderPlaced(
     override val order: OrderData,
 ) : OrderEvent {
     override fun eventName() = "Order Placed"
-    override fun eventType() = "orders.placed"
+    override fun eventType() = "order.placed"
 }
 
 data class OrderCanceled(
@@ -36,5 +36,5 @@ data class OrderCanceled(
     override val order: OrderData,
 ) : OrderEvent {
     override fun eventName() = "Order Canceled"
-    override fun eventType() = "orders.canceled"
+    override fun eventType() = "order.canceled"
 }
