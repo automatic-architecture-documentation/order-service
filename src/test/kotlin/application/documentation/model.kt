@@ -42,8 +42,10 @@ data class EventDescription(
 
 data class PublishedMessage(
     val exchange: String,
-    val routingKey: String,
-)
+    val routingKeys: List<String>,
+) {
+    constructor(name: String, routingKey: String) : this(name, listOf(routingKey))
+}
 
 data class ConsumedQueue(
     val name: String,

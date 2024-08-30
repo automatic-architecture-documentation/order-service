@@ -81,8 +81,8 @@ class OrderEventTests {
     private fun createDocumentationParts(description: EventDescription) {
         createOrReplaceEvent(description)
         val publishedMessage = PublishedMessage(
-            exchange = EXCHANGE_ORDER_EVENTS,
-            routingKey = description.type
+            name = EXCHANGE_ORDER_EVENTS,
+            routingKey = description.type,
         )
         createOrAmendPublishedMessage(publishedMessage)
     }
