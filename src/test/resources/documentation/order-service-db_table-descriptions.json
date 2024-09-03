@@ -54,7 +54,7 @@
         "description": "The exact point in time when this order was submitted by the customer."
       },
       {
-        "columnName": "ordered_at",
+        "columnName": "dispatched_at",
         "description": "The exact point in time when this order was dispatched to the customer."
       },
       {
