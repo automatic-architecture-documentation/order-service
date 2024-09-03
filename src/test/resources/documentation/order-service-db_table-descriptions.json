@@ -1,0 +1,74 @@
+[
+  {
+    "tableName": "addresses",
+    "description": "Stores saved addresses of customers.",
+    "columns": [
+      {
+        "columnName": "id",
+        "description": "The unique ID of this address."
+      },
+      {
+        "columnName": "customer_id",
+        "description": "The unique ID of the customer this address belongs to."
+      },
+      {
+        "columnName": "name",
+        "description": "The name of the customer used for this address."
+      },
+      {
+        "columnName": "street",
+        "description": "The name of the street incl. house numbers and other additions."
+      },
+      {
+        "columnName": "city",
+        "description": "The name of the city."
+      },
+      {
+        "columnName": "zip_code",
+        "description": "The ZIP code."
+      },
+      {
+        "columnName": "zip_code",
+        "description": "The ZIP code."
+      },
+      {
+        "columnName": "country",
+        "description": "A ISO 3166-2 country code."
+      }
+    ]
+  },
+  {
+    "tableName": "orders",
+    "description": "Central table of this service. Stores all orders and their state.",
+    "columns": [
+      {
+        "columnName": "id",
+        "description": "The unique ID of this address."
+      },
+      {
+        "columnName": "customer_id",
+        "description": "The unique ID of the customer from the central customer management service."
+      },
+      {
+        "columnName": "ordered_at",
+        "description": "The exact point in time when this order was submitted by the customer."
+      },
+      {
+        "columnName": "ordered_at",
+        "description": "The exact point in time when this order was dispatched to the customer."
+      },
+      {
+        "columnName": "billing_address_id",
+        "description": "ID of the address used for billing. Foreign key from 'addresses' table."
+      },
+      {
+        "columnName": "shipping_address_id",
+        "description": "ID of the address used for shipping. Foreign key from 'addresses' table."
+      },
+      {
+        "columnName": "status",
+        "description": "The status of the order. Can be 'OPEN', 'PROCESSING', 'DISPATCHED', 'DELIVERED', 'CANCELED' or 'FAILED'"
+      }
+    ]
+  }
+]

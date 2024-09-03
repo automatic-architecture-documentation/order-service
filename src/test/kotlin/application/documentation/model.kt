@@ -58,3 +58,26 @@ data class ConsumedQueue(
         val routingKeyPattern: String,
     )
 }
+
+data class DatabaseDescription(
+    val id: String,
+    val name: String,
+    val type: String,
+    val description: String?,
+    val tables: List<Table>,
+) {
+    data class Table(
+        val name: String,
+        val description: String?,
+        val columns: List<Column>,
+    )
+
+    data class Column(
+        val name: String,
+        val dataType: String,
+        val defaultValue: String?,
+        val nullable: Boolean,
+        val description: String?,
+        val partOfPrimaryKey: Boolean,
+    )
+}

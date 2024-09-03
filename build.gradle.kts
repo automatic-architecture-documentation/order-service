@@ -22,22 +22,32 @@ repositories {
 dependencyManagement {
     imports {
         mavenBom("org.jetbrains.kotlin:kotlin-bom:1.9.24")
+        mavenBom("org.testcontainers:testcontainers-bom:1.19.8")
         mavenBom(BOM_COORDINATES)
+    }
+    dependencies {
+        dependency("au.com.dius.pact.provider:junit5:4.6.7")
+        dependency("org.wiremock:wiremock-standalone:3.4.1")
     }
 }
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-amqp")
+    implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.flywaydb:flyway-database-postgresql")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("com.fasterxml.jackson.core:jackson-annotations")
     implementation("com.fasterxml.jackson.core:jackson-core")
     implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    testImplementation("au.com.dius.pact.provider:junit5:4.6.7")
+    runtimeOnly("org.postgresql:postgresql")
+    testImplementation("au.com.dius.pact.provider:junit5")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.wiremock:wiremock-standalone:3.4.1")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:postgresql")
+    testImplementation("org.wiremock:wiremock-standalone")
 }
 
 tasks.withType<KotlinCompile> {

@@ -89,6 +89,15 @@ object ArchitectureDocumentation {
         }
     }
 
+    fun createOrReplaceDatabase(description: DatabaseDescription) {
+        val folder = File(rootFolder, "databases")
+        val file = File(folder, description.id + ".json")
+
+        createOrReplaceFile(file) {
+            write(toJsonString(description))
+        }
+    }
+
     private fun toJsonString(value: Any): String =
         objectMapper.writeValueAsString(value)
 
