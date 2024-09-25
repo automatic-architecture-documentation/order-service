@@ -2,9 +2,9 @@ application:
   external:
     backends:
       inventory-service:
-        base-url: https://backend-service-2
+        base-url: https://inventory-service
       payment-service:
-        base-url: https://egress-gateway/es1
+        base-url: https://payment-service.payments.svc.cluster.local
 
 spring:
   application:
