@@ -11,20 +11,13 @@ interface Event {
 }
 
 interface OrderEvent : Event {
-    val order: OrderData
+    val order: Order
 }
-
-data class OrderData(
-    val orderId: UUID,
-    val customerId: UUID,
-    val status: OrderStatus,
-    // etc ..
-)
 
 data class OrderPlaced(
     override val id: UUID,
     override val timestamp: Instant,
-    override val order: OrderData,
+    override val order: Order,
 ) : OrderEvent {
     override fun eventName() = "Order Placed"
     override fun eventType() = "order.placed"
@@ -33,7 +26,7 @@ data class OrderPlaced(
 data class OrderCanceled(
     override val id: UUID,
     override val timestamp: Instant,
-    override val order: OrderData,
+    override val order: Order,
 ) : OrderEvent {
     override fun eventName() = "Order Canceled"
     override fun eventType() = "order.canceled"
