@@ -3,6 +3,8 @@ application:
     backends:
       inventory-service:
         base-url: https://inventory-service
+      notification-service:
+        base-url: https://notification-service.core.svc.cluster.local
       payment-service:
         base-url: https://payment-service.payments.svc.cluster.local
 
